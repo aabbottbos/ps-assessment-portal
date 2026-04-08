@@ -1,0 +1,40 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Assessment {
+  id                  String      @id @default(cuid())
+  clientName          String
+  clientDescription   String?
+  assessmentType      String      // e.g. "Initial Audit", "Follow-up", "Deep Dive"
+  assessmentUrl       String      // The real external Vercel URL — never sent to client browser
+  slug                String      @unique // used in the public URL: /assessments/<slug>
+  passwordRequired    Boolean     @default(true)
+  password            String?     // plaintext for Phase 1; hash in Phase 2
+  status              String      @default("active") // "active" | "inactive" | "archived"
+  createdAt           DateTime    @default(now())
+  updatedAt           DateTime    @updatedAt
+  accessLogs          AccessLog[]
+
+  @@index([slug])
+  @@index([status])
+}
+
+model AccessLog {
+  id           String     @id @default(cuid())
+  assessmentId String
+  assessment   Assessment @relation(fields: [assessmentId], references: [id], onDelete: Cascade)
+  accessedAt   DateTime   @default(now())
+  // No PII — do not log IP or user agent
+
+  @@index([assessmentId])
+  @@index([accessedAt])
+}

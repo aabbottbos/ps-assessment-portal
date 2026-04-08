@@ -1,0 +1,34 @@
+{
+  "name": "ps-assessment-portal",
+  "version": "1.0.0",
+  "description": "PS Assessments Portal - Secure gateway for Product School enterprise customer assessments",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "author": "Product School",
+  "license": "ISC",
+  "dependencies": {
+    "@neondatabase/serverless": "^1.0.2",
+    "@prisma/client": "^5.22.0",
+    "jose": "^6.2.2",
+    "lucide-react": "^1.7.0",
+    "next": "^14.2.35",
+    "next-auth": "^5.0.0-beta.30",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "sonner": "^2.0.7"
+  },
+  "devDependencies": {
+    "@types/node": "^25.5.2",
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
+    "autoprefixer": "^10.4.27",
+    "postcss": "^8.5.9",
+    "prisma": "^5.22.0",
+    "tailwindcss": "^4.2.2",
+    "typescript": "^6.0.2"
+  }
+}
