@@ -10,7 +10,7 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const { slug, password } = body;
 
-    if (!slug || !password) {
+    if (!slug) {
       return NextResponse.json(
         { success: false, error: "Missing required fields" },
         { status: 400 }
@@ -32,11 +32,20 @@ export async function POST(request: NextRequest) {
     // Check password
     if (!assessment.passwordRequired) {
       // Password not required, allow access
-    } else if (assessment.password !== password) {
-      return NextResponse.json(
-        { success: false, error: "Incorrect password" },
-        { status: 401 }
-      );
+    } else {
+      // Password is required, validate it
+      if (!password) {
+        return NextResponse.json(
+          { success: false, error: "Password is required" },
+          { status: 400 }
+        );
+      }
+      if (assessment.password !== password) {
+        return NextResponse.json(
+          { success: false, error: "Incorrect password" },
+          { status: 401 }
+        );
+      }
     }
 
     // Generate session token

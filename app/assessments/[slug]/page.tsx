@@ -43,17 +43,12 @@ export default async function AssessmentPage({
     }
   }
 
-  // If password not required and no session yet, create session immediately
-  if (!assessment.passwordRequired && !hasValidSession) {
-    // This will be handled by the client-side component
-  }
-
   // If has valid session, show iframe
   if (hasValidSession) {
     return <AssessmentIframe slug={slug} />;
   }
 
-  // Otherwise, show password entry
+  // Otherwise, show password entry (will auto-submit if passwordRequired=false)
   return (
     <PasswordEntry
       slug={slug}

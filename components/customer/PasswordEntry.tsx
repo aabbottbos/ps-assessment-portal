@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Loader2, Lock } from "lucide-react";
 import { ProductSchoolLogo } from "@/components/ProductSchoolLogo";
@@ -21,8 +21,17 @@ export function PasswordEntry({
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  // Auto-submit for public assessments
+  useEffect(() => {
+    if (!passwordRequired) {
+      handleSubmit();
+    }
+  }, [passwordRequired]);
+
+  const handleSubmit = async (e?: React.FormEvent) => {
+    if (e) {
+      e.preventDefault();
+    }
     setError("");
     setLoading(true);
 
@@ -32,7 +41,7 @@ export function PasswordEntry({
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ slug, password }),
+        body: JSON.stringify({ slug, password: passwordRequired ? password : "" }),
       });
 
       const data = await response.json();
@@ -50,6 +59,35 @@ export function PasswordEntry({
       setLoading(false);
     }
   };
+
+  // Show loading state for public assessments
+  if (!passwordRequired) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
+        <div className="max-w-md w-full">
+          <div className="text-center mb-10">
+            <div className="flex justify-center mb-6">
+              <ProductSchoolLogo className="h-12 w-auto text-gray-900" />
+            </div>
+          </div>
+          <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-10">
+            <div className="text-center">
+              <Loader2 className="h-12 w-12 animate-spin text-ps-blue mx-auto mb-4" />
+              <h2 className="text-2xl font-bold text-gray-900 tracking-tight mb-2">
+                {clientName}
+              </h2>
+              <p className="text-sm text-gray-600">
+                Loading assessment...
+              </p>
+            </div>
+          </div>
+          <p className="mt-6 text-center text-xs text-gray-500">
+            © {new Date().getFullYear()} Product School. All rights reserved.
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
@@ -70,11 +108,9 @@ export function PasswordEntry({
             <h2 className="text-2xl font-bold text-gray-900 tracking-tight mb-2">
               {clientName}
             </h2>
-            {passwordRequired && (
-              <p className="text-sm text-gray-600">
-                Enter your access password to continue
-              </p>
-            )}
+            <p className="text-sm text-gray-600">
+              Enter your access password to continue
+            </p>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-4">
