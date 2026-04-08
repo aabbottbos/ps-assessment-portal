@@ -1,16 +1,22 @@
 import { SignJWT, jwtVerify } from "jose";
 
-const SESSION_SECRET = process.env.ASSESSMENT_SESSION_SECRET || "";
-
-if (!SESSION_SECRET) {
-  throw new Error("ASSESSMENT_SESSION_SECRET environment variable is not set");
-}
-
-const secret = new TextEncoder().encode(SESSION_SECRET);
-
 export interface AssessmentSessionPayload {
   assessmentId: string;
   slug: string;
+}
+
+/**
+ * Gets the session secret and encodes it
+ * Throws error if not set (lazy evaluation for runtime only)
+ */
+function getSecret(): Uint8Array {
+  const SESSION_SECRET = process.env.ASSESSMENT_SESSION_SECRET;
+
+  if (!SESSION_SECRET) {
+    throw new Error("ASSESSMENT_SESSION_SECRET environment variable is not set");
+  }
+
+  return new TextEncoder().encode(SESSION_SECRET);
 }
 
 /**
@@ -24,7 +30,7 @@ export async function signAssessmentSession(
     .setProtectedHeader({ alg: "HS256" })
     .setIssuedAt()
     .setExpirationTime("24h")
-    .sign(secret);
+    .sign(getSecret());
 }
 
 /**
@@ -35,7 +41,7 @@ export async function verifyAssessmentSession(
   token: string
 ): Promise<AssessmentSessionPayload | null> {
   try {
-    const { payload } = await jwtVerify(token, secret);
+    const { payload } = await jwtVerify(token, getSecret());
     if (
       payload &&
       typeof payload.assessmentId === "string" &&
