@@ -94,6 +94,26 @@ ps-assessments-portal/
 
 5. **Run the development server**
 
+   **Option A: Using management scripts (recommended)**
+
+   ```bash
+   # Start the server in background
+   ./scripts/start.sh
+
+   # Check status
+   ./scripts/status.sh
+
+   # View logs
+   ./scripts/logs.sh
+
+   # Stop the server
+   ./scripts/stop.sh
+   ```
+
+   See [scripts/README.md](./scripts/README.md) for all available commands.
+
+   **Option B: Using npm directly**
+
    ```bash
    npm run dev
    ```

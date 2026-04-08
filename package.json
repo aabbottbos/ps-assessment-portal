@@ -4,9 +4,10 @@
   "description": "PS Assessments Portal - Secure gateway for Product School enterprise customer assessments",
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "prisma generate && next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "postinstall": "prisma generate"
   },
   "author": "Product School",
   "license": "ISC",

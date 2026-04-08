@@ -89,6 +89,7 @@ Save these values for the next step.
    - Click "Add New" → "Project"
    - Import your GitHub repository
    - Framework Preset: Next.js (auto-detected)
+   - **Important:** Leave "Build Command" empty (use default from `package.json`)
 
 3. **Configure environment variables**
 
@@ -189,6 +190,24 @@ Alternatively, you can add a build command in Vercel:
    - Verify the iframe loads correctly
 
 ## Troubleshooting
+
+### Build Errors
+
+If you encounter build errors like:
+```
+Error: Failed to collect page data
+sh: line 1: Prisma: command not found
+```
+
+**→ See detailed fix guide:** [`VERCEL_BUILD_FIX.md`](./VERCEL_BUILD_FIX.md)
+
+**Quick fix:**
+1. Go to Vercel Settings → Build & Development Settings
+2. Leave "Build Command" **empty** (or set to `npm run build`)
+3. Ensure all environment variables are set for all environments
+4. Redeploy
+
+**Visual guide:** [`VERCEL_SETTINGS.md`](./VERCEL_SETTINGS.md)
 
 ### Database Connection Issues
 
