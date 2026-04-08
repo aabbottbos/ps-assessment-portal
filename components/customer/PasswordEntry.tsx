@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Loader2, Lock } from "lucide-react";
+import { ProductSchoolLogo } from "@/components/ProductSchoolLogo";
 
 interface PasswordEntryProps {
   slug: string;
@@ -54,24 +55,23 @@ export function PasswordEntry({
     <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
       <div className="max-w-md w-full">
         {/* Logo */}
-        <div className="text-center mb-8">
-          <div className="mx-auto h-16 w-16 bg-primary-600 rounded-lg flex items-center justify-center mb-4">
-            <span className="text-white font-bold text-2xl">PS</span>
+        <div className="text-center mb-10">
+          <div className="flex justify-center mb-6">
+            <ProductSchoolLogo className="h-12 w-auto text-gray-900" />
           </div>
-          <h1 className="text-2xl font-bold text-gray-900">Product School</h1>
         </div>
 
         {/* Card */}
-        <div className="bg-white rounded-lg shadow-lg border border-gray-200 p-8">
-          <div className="text-center mb-6">
-            <div className="inline-flex items-center justify-center w-12 h-12 bg-primary-100 rounded-full mb-3">
-              <Lock className="h-6 w-6 text-primary-600" />
+        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-10">
+          <div className="text-center mb-8">
+            <div className="inline-flex items-center justify-center w-14 h-14 bg-ps-blue-50 rounded-full mb-4">
+              <Lock className="h-7 w-7 text-ps-blue" />
             </div>
-            <h2 className="text-xl font-semibold text-gray-900">
-              {clientName} Assessment
+            <h2 className="text-2xl font-bold text-gray-900 tracking-tight mb-2">
+              {clientName}
             </h2>
             {passwordRequired && (
-              <p className="mt-2 text-sm text-gray-600">
+              <p className="text-sm text-gray-600">
                 Enter your access password to continue
               </p>
             )}
@@ -87,7 +87,7 @@ export function PasswordEntry({
                 id="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                className="w-full px-4 py-3 border border-gray-300 rounded-md text-sm text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-ps-blue focus:border-transparent placeholder:text-gray-400"
                 placeholder="Enter password"
                 required
                 disabled={loading}
@@ -104,9 +104,9 @@ export function PasswordEntry({
             <button
               type="submit"
               disabled={loading || !password}
-              className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-primary-600 text-white font-medium rounded-md hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              className="w-full flex items-center justify-center gap-2 px-4 py-3.5 bg-ps-blue text-white font-semibold rounded-md hover:bg-ps-navy transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
             >
-              {loading && <Loader2 className="h-4 w-4 animate-spin" />}
+              {loading && <Loader2 className="h-5 w-5 animate-spin" />}
               Access Assessment
             </button>
           </form>

@@ -142,7 +142,7 @@ export function AssessmentForm({ assessment }: AssessmentFormProps) {
           onChange={(e) =>
             setFormData({ ...formData, clientName: e.target.value })
           }
-          className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary-500 focus:border-primary-500"
+          className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-ps-blue focus:border-transparent placeholder:text-gray-400"
           required
         />
       </div>
@@ -163,7 +163,7 @@ export function AssessmentForm({ assessment }: AssessmentFormProps) {
           onChange={(e) =>
             setFormData({ ...formData, assessmentType: e.target.value })
           }
-          className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary-500 focus:border-primary-500"
+          className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-ps-blue focus:border-transparent placeholder:text-gray-400"
           placeholder="e.g., Initial Audit, Follow-up, Deep Dive"
           required
         />
@@ -189,7 +189,7 @@ export function AssessmentForm({ assessment }: AssessmentFormProps) {
             setFormData({ ...formData, clientDescription: e.target.value })
           }
           rows={3}
-          className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary-500 focus:border-primary-500"
+          className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-ps-blue focus:border-transparent placeholder:text-gray-400"
           placeholder="Internal notes about this client or assessment"
         />
       </div>
@@ -239,7 +239,7 @@ export function AssessmentForm({ assessment }: AssessmentFormProps) {
               setFormData({ ...formData, slug: e.target.value });
             }}
             onBlur={handleSlugBlur}
-            className="flex-1 px-3 py-2 border border-gray-300 rounded-r-md shadow-sm focus:outline-none focus:ring-primary-500 focus:border-primary-500 font-mono text-sm"
+            className="flex-1 px-3 py-2 border border-gray-300 rounded-r-md text-sm text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-ps-blue focus:border-transparent font-mono"
             pattern="[a-z0-9-]+"
             title="Only lowercase letters, numbers, and hyphens"
             required
@@ -260,7 +260,7 @@ export function AssessmentForm({ assessment }: AssessmentFormProps) {
             onChange={(e) =>
               setFormData({ ...formData, passwordRequired: e.target.checked })
             }
-            className="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded"
+            className="h-4 w-4 text-ps-blue focus:ring-ps-blue border-gray-300 rounded"
           />
         </div>
         <div className="ml-3">
@@ -293,7 +293,7 @@ export function AssessmentForm({ assessment }: AssessmentFormProps) {
               onChange={(e) =>
                 setFormData({ ...formData, password: e.target.value })
               }
-              className="w-full px-3 py-2 pr-10 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary-500 focus:border-primary-500"
+              className="w-full px-3 py-2 pr-10 border border-gray-300 rounded-md text-sm text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-ps-blue focus:border-transparent"
               required={formData.passwordRequired}
             />
             <button
@@ -323,7 +323,7 @@ export function AssessmentForm({ assessment }: AssessmentFormProps) {
           id="status"
           value={formData.status}
           onChange={(e) => setFormData({ ...formData, status: e.target.value })}
-          className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary-500 focus:border-primary-500"
+          className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-ps-blue focus:border-transparent placeholder:text-gray-400"
           required
         >
           <option value="active">Active</option>
@@ -337,7 +337,7 @@ export function AssessmentForm({ assessment }: AssessmentFormProps) {
         <button
           type="button"
           onClick={() => router.back()}
-          className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
+          className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 transition-colors"
           disabled={loading}
         >
           Cancel
@@ -345,7 +345,7 @@ export function AssessmentForm({ assessment }: AssessmentFormProps) {
         <button
           type="submit"
           disabled={loading}
-          className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-primary-600 border border-transparent rounded-md hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 disabled:opacity-50 disabled:cursor-not-allowed"
+          className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-ps-blue border border-transparent rounded-md hover:bg-ps-navy transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
         >
           {loading && <Loader2 className="h-4 w-4 animate-spin" />}
           {assessment ? "Update Assessment" : "Create Assessment"}

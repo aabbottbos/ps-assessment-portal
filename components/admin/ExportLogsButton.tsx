@@ -57,7 +57,7 @@ export function ExportLogsButton({ logs, clientName }: ExportLogsButtonProps) {
     <button
       onClick={handleExport}
       disabled={logs.length === 0}
-      className="inline-flex items-center gap-2 px-4 py-2 bg-white border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+      className="inline-flex items-center gap-2 px-4 py-2 bg-white border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50 hover:border-gray-300 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
     >
       <Download className="h-4 w-4" />
       Export CSV

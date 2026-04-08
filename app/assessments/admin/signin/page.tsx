@@ -1,18 +1,21 @@
 import { signIn } from "@/lib/auth";
+import { ProductSchoolLogo } from "@/components/ProductSchoolLogo";
 
 export default function SignInPage() {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50">
-      <div className="max-w-md w-full space-y-8">
-        <div className="text-center">
-          <div className="mx-auto h-12 w-12 bg-primary-600 rounded-lg flex items-center justify-center mb-4">
-            <span className="text-white font-bold text-xl">PS</span>
+    <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
+      <div className="max-w-md w-full">
+        <div className="text-center mb-10">
+          <div className="flex justify-center mb-8">
+            <ProductSchoolLogo className="h-12 w-auto text-gray-900" />
           </div>
-          <h2 className="text-3xl font-bold text-gray-900">PS Assessments Portal</h2>
-          <p className="mt-2 text-sm text-gray-600">Admin Access</p>
+          <h1 className="text-3xl font-bold text-gray-900 tracking-tight mb-2">
+            Assessments Portal
+          </h1>
+          <p className="text-base text-gray-600">Sign in to access the admin dashboard</p>
         </div>
 
-        <div className="mt-8 bg-white py-8 px-6 shadow rounded-lg">
+        <div className="bg-white py-10 px-8 shadow-sm rounded-xl border border-gray-200">
           <form
             action={async () => {
               "use server";
@@ -21,7 +24,7 @@ export default function SignInPage() {
           >
             <button
               type="submit"
-              className="w-full flex justify-center items-center gap-3 py-3 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 transition-colors"
+              className="w-full flex justify-center items-center gap-3 py-3.5 px-4 border border-gray-300 rounded-md bg-white text-sm font-semibold text-gray-700 hover:bg-gray-50 hover:border-gray-400 transition-colors"
             >
               <svg className="w-5 h-5" viewBox="0 0 24 24">
                 <path

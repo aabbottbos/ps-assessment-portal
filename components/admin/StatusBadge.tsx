@@ -4,9 +4,9 @@ interface StatusBadgeProps {
 
 export function StatusBadge({ status }: StatusBadgeProps) {
   const styles = {
-    active: "bg-green-100 text-green-800 border-green-200",
-    inactive: "bg-yellow-100 text-yellow-800 border-yellow-200",
-    archived: "bg-gray-100 text-gray-800 border-gray-200",
+    active: "bg-green-100 text-green-700",
+    inactive: "bg-yellow-100 text-yellow-700",
+    archived: "bg-gray-100 text-gray-700",
   };
 
   const style =
@@ -14,7 +14,7 @@ export function StatusBadge({ status }: StatusBadgeProps) {
 
   return (
     <span
-      className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border ${style}`}
+      className={`inline-flex items-center px-2.5 py-1 rounded-md text-xs font-medium transition-colors ${style}`}
     >
       {status.charAt(0).toUpperCase() + status.slice(1)}
     </span>

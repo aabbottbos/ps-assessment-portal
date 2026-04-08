@@ -15,37 +15,37 @@ export default async function AdminDashboardPage() {
   const archivedAssessments = assessments.filter((a: any) => a.status === "archived");
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      <div className="flex justify-between items-center mb-6">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+      <div className="flex justify-between items-start mb-8">
         <div>
-          <h2 className="text-2xl font-bold text-gray-900">Assessments</h2>
-          <p className="mt-1 text-sm text-gray-600">
+          <h1 className="text-3xl font-bold text-gray-900 tracking-tight">Assessments</h1>
+          <p className="mt-2 text-base text-gray-600">
             Manage client assessment access and configurations
           </p>
         </div>
         <Link
           href="/assessments/admin/new"
-          className="inline-flex items-center gap-2 px-4 py-2 bg-primary-600 text-white text-sm font-medium rounded-md hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 transition-colors"
+          className="inline-flex items-center gap-2 px-5 py-2.5 bg-ps-blue text-white text-sm font-semibold rounded-md hover:bg-ps-navy transition-colors"
         >
-          <Plus className="h-4 w-4" />
-          Add Assessment
+          <Plus className="h-5 w-5" />
+          New Assessment
         </Link>
       </div>
 
       {assessments.length === 0 ? (
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-12 text-center">
-          <div className="mx-auto h-12 w-12 bg-gray-100 rounded-full flex items-center justify-center mb-4">
-            <FileText className="h-6 w-6 text-gray-400" />
+        <div className="bg-white rounded-xl border border-gray-200 p-16 text-center">
+          <div className="mx-auto h-16 w-16 bg-ps-blue-50 rounded-full flex items-center justify-center mb-6">
+            <FileText className="h-8 w-8 text-ps-blue" />
           </div>
-          <h3 className="text-lg font-medium text-gray-900 mb-2">No assessments yet</h3>
-          <p className="text-gray-600 mb-6">
-            Get started by creating your first assessment.
+          <h3 className="text-xl font-semibold text-gray-900 mb-2">No assessments yet</h3>
+          <p className="text-gray-600 mb-8 max-w-sm mx-auto">
+            Get started by creating your first client assessment.
           </p>
           <Link
             href="/assessments/admin/new"
-            className="inline-flex items-center gap-2 px-4 py-2 bg-primary-600 text-white text-sm font-medium rounded-md hover:bg-primary-700 transition-colors"
+            className="inline-flex items-center gap-2 px-5 py-2.5 bg-ps-blue text-white text-sm font-semibold rounded-md hover:bg-ps-navy transition-colors"
           >
-            <Plus className="h-4 w-4" />
+            <Plus className="h-5 w-5" />
             Create Assessment
           </Link>
         </div>
@@ -100,55 +100,57 @@ function AssessmentSection({
   return (
     <div>
       {title && (
-        <h3 className="text-sm font-semibold text-gray-700 mb-3">
-          {title} ({assessments.length})
-        </h3>
+        <h2 className="text-base font-semibold text-gray-900 mb-4">
+          {title} <span className="text-gray-500 font-normal">({assessments.length})</span>
+        </h2>
       )}
-      <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+      <div className="bg-white rounded-xl border border-gray-200 overflow-hidden shadow-sm">
         <table className="min-w-full divide-y divide-gray-200">
-          <thead className="bg-gray-50">
+          <thead className="bg-gray-50/50">
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
                 Client Name
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Assessment Type
+              <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                Type
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Slug (URL)
+              <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                Assessment URL
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
                 Status
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
                 Password
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                URL
+              <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                Share
               </th>
-              <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-4 text-right text-xs font-semibold text-gray-600 uppercase tracking-wider">
                 Actions
               </th>
             </tr>
           </thead>
-          <tbody className="bg-white divide-y divide-gray-200">
+          <tbody className="bg-white divide-y divide-gray-100">
             {assessments.map((assessment) => (
-              <tr key={assessment.id} className="hover:bg-gray-50">
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="text-sm font-medium text-gray-900">
+              <tr key={assessment.id} className="hover:bg-gray-50/50 transition-colors">
+                <td className="px-6 py-4">
+                  <div className="text-sm font-semibold text-gray-900">
                     {assessment.clientName}
                   </div>
                   {assessment.clientDescription && (
-                    <div className="text-xs text-gray-500 max-w-xs truncate">
+                    <div className="text-xs text-gray-600 mt-0.5 max-w-xs truncate">
                       {assessment.clientDescription}
                     </div>
                   )}
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
-                  {assessment.assessmentType}
-                </td>
                 <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="text-xs font-mono text-gray-600">
+                  <span className="text-sm text-gray-700">
+                    {assessment.assessmentType}
+                  </span>
+                </td>
+                <td className="px-6 py-4">
+                  <div className="text-xs font-mono text-gray-600 bg-gray-50 px-2 py-1 rounded inline-block">
                     productschool.net/assessments/{assessment.slug}
                   </div>
                 </td>
@@ -178,7 +180,7 @@ function AssessmentSection({
                   <div className="flex items-center justify-end gap-2">
                     <Link
                       href={`/assessments/admin/${assessment.id}`}
-                      className="text-primary-600 hover:text-primary-900 p-1"
+                      className="text-ps-blue hover:text-ps-navy p-1"
                       title="Edit"
                     >
                       <Edit className="h-4 w-4" />
