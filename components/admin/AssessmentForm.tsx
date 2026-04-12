@@ -259,7 +259,7 @@ export function AssessmentForm({ type, assessment }: AssessmentFormProps) {
             }}
             onBlur={handleSlugBlur}
             className="flex-1 px-3 py-2 border border-gray-300 rounded-r-md text-sm text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-primary-600 focus:border-transparent font-mono"
-            pattern="[a-z0-9-]+"
+            pattern="[a-z0-9\-]+"
             title="Only lowercase letters, numbers, and hyphens"
             required
           />
