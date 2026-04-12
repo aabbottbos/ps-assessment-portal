@@ -2,7 +2,7 @@ import { db } from "@/lib/db";
 import { CopyButton } from "@/components/admin/CopyButton";
 import { StatusBadge } from "@/components/admin/StatusBadge";
 import { DeleteAssessmentButton } from "@/components/admin/DeleteAssessmentButton";
-import { Plus, Edit, FileText } from "lucide-react";
+import { Plus, Edit, FileText, ExternalLink } from "lucide-react";
 import Link from "next/link";
 
 // Admin Dashboard - Updated 2026-04-12
@@ -223,9 +223,18 @@ function AssessmentSection({
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                   <div className="flex items-center justify-end gap-2">
+                    <a
+                      href={`/${pathPrefix}/${assessment.slug}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-ps-blue hover:text-ps-navy p-1"
+                      title="Open in new window"
+                    >
+                      <ExternalLink className="h-4 w-4" />
+                    </a>
                     <Link
                       href={`/admin/${assessment.id}`}
-                      className="text-primary-600 hover:text-primary-700 p-1"
+                      className="text-gray-600 hover:text-gray-900 p-1"
                       title="Edit"
                     >
                       <Edit className="h-4 w-4" />
