@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import Image from "next/image";
 
 interface LogoUploadProps {
   currentLogoUrl?: string;
@@ -74,11 +73,10 @@ export default function LogoUpload({
 
       {previewUrl && (
         <div className="relative w-48 h-32 border rounded-lg overflow-hidden bg-gray-50">
-          <Image
+          <img
             src={previewUrl}
             alt="Logo preview"
-            fill
-            className="object-contain p-2"
+            className="w-full h-full object-contain p-2"
           />
           {uploading && (
             <div className="absolute inset-0 bg-white/80 flex items-center justify-center">

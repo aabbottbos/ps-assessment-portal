@@ -124,7 +124,9 @@ export function AssessmentForm({ type, assessment }: AssessmentFormProps) {
             ? `${itemTypeName} updated successfully`
             : `${itemTypeName} created successfully`
         );
-        router.push("/admin");
+        // Redirect to the correct tab based on type
+        const tab = formData.type === "proposal" ? "proposals" : "assessments";
+        router.push(`/admin?tab=${tab}`);
         router.refresh();
       } else {
         toast.error(result.error || "An error occurred");
@@ -362,7 +364,7 @@ export function AssessmentForm({ type, assessment }: AssessmentFormProps) {
         <button
           type="submit"
           disabled={loading}
-          className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-primary-600 border border-transparent rounded-md hover:bg-primary-700 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+          className="inline-flex items-center gap-2 px-5 py-2.5 bg-ps-blue text-white text-sm font-semibold rounded-md hover:bg-ps-navy transition-colors shadow-sm disabled:opacity-40 disabled:cursor-not-allowed"
         >
           {loading && <Loader2 className="h-4 w-4 animate-spin" />}
           {assessment ? `Update ${itemTypeName}` : `Create ${itemTypeName}`}

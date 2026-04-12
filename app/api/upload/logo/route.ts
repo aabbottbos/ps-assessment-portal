@@ -29,16 +29,21 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Upload to Vercel Blob
+    // Upload to Vercel Blob with public access for customer-facing logos
+    // Note: Requires Blob store to be configured as "public" in Vercel dashboard
     const blob = await put(file.name, file, {
       access: "public",
+      addRandomSuffix: true, // Prevent filename collisions
     });
 
     return NextResponse.json({ url: blob.url });
   } catch (error) {
     console.error("Error uploading file:", error);
+    const errorMessage = error instanceof Error ? error.message : "Unknown error";
+    console.error("Error details:", errorMessage);
+    console.error("BLOB_READ_WRITE_TOKEN exists:", !!process.env.BLOB_READ_WRITE_TOKEN);
     return NextResponse.json(
-      { error: "Failed to upload file" },
+      { error: `Failed to upload file: ${errorMessage}` },
       { status: 500 }
     );
   }
