@@ -25,7 +25,7 @@ export default function AuthErrorPage() {
           </p>
 
           <Link
-            href="/assessments/admin/signin"
+            href="/admin/signin"
             className="w-full inline-flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm bg-primary-600 text-sm font-medium text-white hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 transition-colors"
           >
             Back to Sign In

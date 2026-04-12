@@ -5,16 +5,16 @@ import { verifyAssessmentSession, getAssessmentCookieName } from "@/lib/session"
 import { PasswordEntry } from "@/components/customer/PasswordEntry";
 import { AssessmentIframe } from "@/components/customer/AssessmentIframe";
 
-export default async function AssessmentPage({
+export default async function ProposalPage({
   params,
 }: {
   params: { slug: string };
 }) {
   const { slug } = params;
 
-  // Look up the assessment
+  // Look up the proposal
   const assessment = await db.assessment.findUnique({
-    where: { slug },
+    where: { slug, type: "proposal" },
   });
 
   // If not found or not active, show 404
@@ -54,7 +54,7 @@ export default async function AssessmentPage({
       slug={slug}
       clientName={assessment.clientName}
       passwordRequired={assessment.passwordRequired}
-      type={assessment.type as "assessment" | "proposal"}
+      type="proposal"
       logoUrl={assessment.logoUrl}
     />
   );

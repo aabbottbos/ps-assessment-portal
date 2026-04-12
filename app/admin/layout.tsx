@@ -17,11 +17,11 @@ export default async function AdminLayout({
         <header className="bg-white border-b border-gray-200 sticky top-0 z-10">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
             <div className="flex items-center gap-4">
-              <Link href="/assessments/admin" className="flex items-center gap-3 hover:opacity-80 transition-opacity">
+              <Link href="/admin" className="flex items-center gap-3 hover:opacity-80 transition-opacity">
                 <ProductSchoolLogo className="h-10 w-auto" />
                 <span className="text-gray-300">|</span>
                 <span className="text-sm font-bold tracking-widest text-gray-700 uppercase">
-                  Assessments Portal
+                  Admin Portal
                 </span>
               </Link>
             </div>
@@ -31,7 +31,7 @@ export default async function AdminLayout({
               <form
                 action={async () => {
                   "use server";
-                  await signOut({ redirectTo: "/assessments/admin/signin" });
+                  await signOut({ redirectTo: "/admin/signin" });
                 }}
               >
                 <button

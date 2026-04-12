@@ -10,10 +10,13 @@ import {
   checkSlugAvailability,
   type AssessmentFormData,
 } from "@/lib/actions/assessments";
+import LogoUpload from "./LogoUpload";
 
 interface AssessmentFormProps {
+  type: "assessment" | "proposal";
   assessment?: {
     id: string;
+    type: string;
     clientName: string;
     clientDescription: string | null;
     assessmentType: string;
@@ -21,18 +24,20 @@ interface AssessmentFormProps {
     slug: string;
     passwordRequired: boolean;
     password: string | null;
+    logoUrl: string | null;
     status: string;
   };
 }
 
 const SUGGESTED_TYPES = ["Initial Audit", "Follow-up", "Deep Dive"];
 
-export function AssessmentForm({ assessment }: AssessmentFormProps) {
+export function AssessmentForm({ type, assessment }: AssessmentFormProps) {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [slugManuallyEdited, setSlugManuallyEdited] = useState(false);
   const [formData, setFormData] = useState<AssessmentFormData>({
+    type: assessment?.type as "assessment" | "proposal" || type,
     clientName: assessment?.clientName || "",
     clientDescription: assessment?.clientDescription || "",
     assessmentType: assessment?.assessmentType || "",
@@ -40,8 +45,14 @@ export function AssessmentForm({ assessment }: AssessmentFormProps) {
     slug: assessment?.slug || "",
     passwordRequired: assessment?.passwordRequired ?? true,
     password: assessment?.password || "",
+    logoUrl: assessment?.logoUrl || "",
     status: assessment?.status || "active",
   });
+
+  const isProposal = formData.type === "proposal";
+  const itemTypeName = isProposal ? "Proposal" : "Assessment";
+  const itemTypeLower = itemTypeName.toLowerCase();
+  const pathPrefix = isProposal ? "proposal" : "assessment";
 
   // Auto-generate slug from client name
   useEffect(() => {
@@ -79,13 +90,13 @@ export function AssessmentForm({ assessment }: AssessmentFormProps) {
       }
 
       if (!formData.assessmentType.trim()) {
-        toast.error("Assessment type is required");
+        toast.error(`${itemTypeName} type is required`);
         setLoading(false);
         return;
       }
 
       if (!formData.assessmentUrl.trim()) {
-        toast.error("Assessment URL is required");
+        toast.error(`${itemTypeName} URL is required`);
         setLoading(false);
         return;
       }
@@ -110,10 +121,10 @@ export function AssessmentForm({ assessment }: AssessmentFormProps) {
       if (result.success) {
         toast.success(
           assessment
-            ? "Assessment updated successfully"
-            : "Assessment created successfully"
+            ? `${itemTypeName} updated successfully`
+            : `${itemTypeName} created successfully`
         );
-        router.push("/assessments/admin");
+        router.push("/admin");
         router.refresh();
       } else {
         toast.error(result.error || "An error occurred");
@@ -142,18 +153,18 @@ export function AssessmentForm({ assessment }: AssessmentFormProps) {
           onChange={(e) =>
             setFormData({ ...formData, clientName: e.target.value })
           }
-          className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-ps-blue focus:border-transparent placeholder:text-gray-400"
+          className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-primary-600 focus:border-transparent placeholder:text-gray-400"
           required
         />
       </div>
 
-      {/* Assessment Type */}
+      {/* Assessment/Proposal Type */}
       <div>
         <label
           htmlFor="assessmentType"
           className="block text-sm font-medium text-gray-700 mb-1"
         >
-          Assessment Type <span className="text-red-500">*</span>
+          {itemTypeName} Type <span className="text-red-500">*</span>
         </label>
         <input
           type="text"
@@ -163,7 +174,7 @@ export function AssessmentForm({ assessment }: AssessmentFormProps) {
           onChange={(e) =>
             setFormData({ ...formData, assessmentType: e.target.value })
           }
-          className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-ps-blue focus:border-transparent placeholder:text-gray-400"
+          className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-primary-600 focus:border-transparent placeholder:text-gray-400"
           placeholder="e.g., Initial Audit, Follow-up, Deep Dive"
           required
         />
@@ -189,18 +200,24 @@ export function AssessmentForm({ assessment }: AssessmentFormProps) {
             setFormData({ ...formData, clientDescription: e.target.value })
           }
           rows={3}
-          className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-ps-blue focus:border-transparent placeholder:text-gray-400"
+          className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-primary-600 focus:border-transparent placeholder:text-gray-400"
           placeholder="Internal notes about this client or assessment"
         />
       </div>
 
-      {/* Assessment URL */}
+      {/* Logo Upload */}
+      <LogoUpload
+        currentLogoUrl={formData.logoUrl}
+        onLogoUploaded={(url) => setFormData({ ...formData, logoUrl: url })}
+      />
+
+      {/* Assessment/Proposal URL */}
       <div>
         <label
           htmlFor="assessmentUrl"
           className="block text-sm font-medium text-gray-700 mb-1"
         >
-          Assessment URL <span className="text-red-500">*</span>
+          {itemTypeName} URL <span className="text-red-500">*</span>
         </label>
         <input
           type="url"
@@ -210,7 +227,7 @@ export function AssessmentForm({ assessment }: AssessmentFormProps) {
             setFormData({ ...formData, assessmentUrl: e.target.value })
           }
           className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary-500 focus:border-primary-500 font-mono text-sm"
-          placeholder="https://your-assessment.vercel.app"
+          placeholder={`https://your-${itemTypeLower}.vercel.app`}
           required
         />
         <p className="mt-1 text-xs text-gray-500">
@@ -228,7 +245,7 @@ export function AssessmentForm({ assessment }: AssessmentFormProps) {
         </label>
         <div className="flex items-center">
           <span className="inline-flex items-center px-3 py-2 rounded-l-md border border-r-0 border-gray-300 bg-gray-50 text-gray-500 text-sm">
-            productschool.net/assessments/
+            productschool.net/{pathPrefix}/
           </span>
           <input
             type="text"
@@ -239,7 +256,7 @@ export function AssessmentForm({ assessment }: AssessmentFormProps) {
               setFormData({ ...formData, slug: e.target.value });
             }}
             onBlur={handleSlugBlur}
-            className="flex-1 px-3 py-2 border border-gray-300 rounded-r-md text-sm text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-ps-blue focus:border-transparent font-mono"
+            className="flex-1 px-3 py-2 border border-gray-300 rounded-r-md text-sm text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-primary-600 focus:border-transparent font-mono"
             pattern="[a-z0-9-]+"
             title="Only lowercase letters, numbers, and hyphens"
             required
@@ -260,7 +277,7 @@ export function AssessmentForm({ assessment }: AssessmentFormProps) {
             onChange={(e) =>
               setFormData({ ...formData, passwordRequired: e.target.checked })
             }
-            className="h-4 w-4 text-ps-blue focus:ring-ps-blue border-gray-300 rounded"
+            className="h-4 w-4 text-primary-600 focus:ring-primary-600 border-gray-300 rounded"
           />
         </div>
         <div className="ml-3">
@@ -271,7 +288,7 @@ export function AssessmentForm({ assessment }: AssessmentFormProps) {
             Password Required
           </label>
           <p className="text-xs text-gray-500">
-            Require a password to access this assessment
+            Require a password to access this {itemTypeLower}
           </p>
         </div>
       </div>
@@ -293,7 +310,7 @@ export function AssessmentForm({ assessment }: AssessmentFormProps) {
               onChange={(e) =>
                 setFormData({ ...formData, password: e.target.value })
               }
-              className="w-full px-3 py-2 pr-10 border border-gray-300 rounded-md text-sm text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-ps-blue focus:border-transparent"
+              className="w-full px-3 py-2 pr-10 border border-gray-300 rounded-md text-sm text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-primary-600 focus:border-transparent"
               required={formData.passwordRequired}
             />
             <button
@@ -323,7 +340,7 @@ export function AssessmentForm({ assessment }: AssessmentFormProps) {
           id="status"
           value={formData.status}
           onChange={(e) => setFormData({ ...formData, status: e.target.value })}
-          className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-ps-blue focus:border-transparent placeholder:text-gray-400"
+          className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-primary-600 focus:border-transparent placeholder:text-gray-400"
           required
         >
           <option value="active">Active</option>
@@ -345,10 +362,10 @@ export function AssessmentForm({ assessment }: AssessmentFormProps) {
         <button
           type="submit"
           disabled={loading}
-          className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-ps-blue border border-transparent rounded-md hover:bg-ps-navy transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+          className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-primary-600 border border-transparent rounded-md hover:bg-primary-700 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
         >
           {loading && <Loader2 className="h-4 w-4 animate-spin" />}
-          {assessment ? "Update Assessment" : "Create Assessment"}
+          {assessment ? `Update ${itemTypeName}` : `Create ${itemTypeName}`}
         </button>
       </div>
     </form>

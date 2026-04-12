@@ -16,12 +16,14 @@ A secure gateway for Product School enterprise clients to access hosted assessme
 ### Admin (Google OAuth - @productschool.com only)
 - ✅ Create/edit/delete assessments
 - ✅ Generate unique slugs and passwords
+- ✅ Toggle public/private access (passwordRequired flag)
 - ✅ View access logs and export to CSV
 - ✅ Archive/activate assessments (soft delete)
 - ✅ Copy passwords and URLs to clipboard
 
-### Customer (Password-protected)
-- ✅ Enter password to access assessment
+### Customer (Public or Password-protected)
+- ✅ **Public assessments**: Direct iframe access (no password required)
+- ✅ **Private assessments**: Password entry screen, then iframe access
 - ✅ Assessment loads in iframe via proxy
 - ✅ Real URLs never exposed to client
 - ✅ Session cookie (24hr, HTTP-only, Secure)
@@ -155,7 +157,9 @@ npx prisma generate
 
 ### Core Logic
 - **lib/actions/assessments.ts** - Server actions for CRUD (createAssessment, updateAssessment, etc.)
+- **app/api/assessments/auth/route.ts** - Password validation API (handles both public and private assessments)
 - **app/api/assessments/proxy/[slug]/route.ts** - Validates session, redirects to real URL
+- **components/customer/PasswordEntry.tsx** - Auto-submits for public assessments, shows password form for private
 
 ### UI
 - **components/ProductSchoolLogo.tsx** - Blue PS logo (HTML/CSS, not SVG)
@@ -165,7 +169,14 @@ npx prisma generate
 
 ## Recent Changes
 
-### UI Updates (Latest)
+### Public/Private Assessments (Latest - April 8, 2026)
+- ✅ **Fixed public assessment access** - Assessments with `passwordRequired=false` now bypass password screen
+- ✅ Updated API validation logic to allow empty passwords for public assessments
+- ✅ Auto-submit authentication for public assessments via client-side useEffect
+- ✅ Loading state shown during public assessment authentication
+- ✅ Private assessments (`passwordRequired=true`) still require password entry
+
+### UI Updates
 - ✅ Changed color scheme from purple to **blue** (#2563eb)
 - ✅ Fixed ProductSchoolLogo to use HTML/CSS (SVG text elements don't render in React)
 - ✅ Updated all components to use `primary-600` (now blue)
@@ -192,7 +203,8 @@ npx prisma generate
 - Database schema and migrations
 - Google OAuth with email restriction
 - Admin CRUD operations
-- Customer password authentication
+- **Public and private assessment access** (passwordRequired toggle)
+- Customer password authentication for private assessments
 - Access logging and CSV export
 - Development scripts
 - Vercel deployment
@@ -218,10 +230,16 @@ npx prisma generate
 5. Copy password and customer URL
 6. View logs, edit, or archive
 
-### Customer Flow
-1. Visit `/assessments/{slug}`
-2. Enter password
+### Customer Flow (Private Assessment)
+1. Visit `/assessments/{slug}` for a password-protected assessment
+2. Enter password on entry screen
 3. Assessment loads in iframe
+4. Access logged (timestamp only, no PII)
+
+### Customer Flow (Public Assessment)
+1. Visit `/assessments/{slug}` for a public assessment
+2. Brief loading state ("Loading assessment...")
+3. Assessment loads in iframe automatically (no password required)
 4. Access logged (timestamp only, no PII)
 
 ---
@@ -264,9 +282,18 @@ lsof -ti:3000 | xargs kill -9
 - **Passwords:** Plaintext for Phase 1 (upgrade to bcrypt later)
 
 ### Data Flow
-1. Customer enters password → API validates → Sets session cookie
-2. Iframe loads `/api/assessments/proxy/{slug}` → Validates session → Redirects to real URL
-3. Client never sees real URL (only proxy URL in iframe src)
+
+**Public Assessments (`passwordRequired=false`):**
+1. Customer visits `/assessments/{slug}` → Component auto-submits with empty password
+2. API validates assessment is public → Sets session cookie → Returns success
+3. Page refreshes → Iframe loads `/api/assessments/proxy/{slug}` → Redirects to real URL
+4. Client never sees real URL (only proxy URL in iframe src)
+
+**Private Assessments (`passwordRequired=true`):**
+1. Customer visits `/assessments/{slug}` → Shows password entry form
+2. Customer enters password → API validates password → Sets session cookie → Returns success
+3. Page refreshes → Iframe loads `/api/assessments/proxy/{slug}` → Redirects to real URL
+4. Client never sees real URL (only proxy URL in iframe src)
 
 ### Performance
 - Neon PostgreSQL with connection pooling for serverless
@@ -290,5 +317,5 @@ lsof -ti:3000 | xargs kill -9
 ---
 
 **Last Updated:** April 8, 2026
-**Status:** ✅ Production-ready with blue theme
+**Status:** ✅ Production-ready with blue theme and public/private assessment support
 **Next Session:** Ready to pick up optional enhancements or new features

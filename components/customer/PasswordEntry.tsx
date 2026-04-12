@@ -2,24 +2,32 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { Loader2, Lock } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import { ProductSchoolLogo } from "@/components/ProductSchoolLogo";
+import Image from "next/image";
 
 interface PasswordEntryProps {
   slug: string;
   clientName: string;
   passwordRequired: boolean;
+  type: "assessment" | "proposal";
+  logoUrl: string | null;
 }
 
 export function PasswordEntry({
   slug,
   clientName,
   passwordRequired,
+  type,
+  logoUrl,
 }: PasswordEntryProps) {
   const router = useRouter();
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+
+  const isProposal = type === "proposal";
+  const itemTypeName = isProposal ? "Proposal" : "Assessment";
 
   // Auto-submit for public assessments
   useEffect(() => {
@@ -60,71 +68,74 @@ export function PasswordEntry({
     }
   };
 
-  // Show loading state for public assessments
+  // Show loading state for public assessments/proposals
   if (!passwordRequired) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
+      <div className="min-h-screen flex items-center justify-center bg-[#F5F5F0] px-4">
         <div className="max-w-md w-full">
-          <div className="text-center mb-10">
-            <div className="flex justify-center mb-6">
-              <ProductSchoolLogo className="h-12 w-auto text-gray-900" />
-            </div>
-          </div>
-          <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-10">
-            <div className="text-center">
-              <Loader2 className="h-12 w-12 animate-spin text-ps-blue mx-auto mb-4" />
-              <h2 className="text-2xl font-bold text-gray-900 tracking-tight mb-2">
-                {clientName}
-              </h2>
-              <p className="text-sm text-gray-600">
-                Loading assessment...
+          <div className="bg-white rounded-3xl shadow-lg border border-gray-200 p-12">
+            <div className="text-center space-y-6">
+              <Loader2 className="h-12 w-12 animate-spin text-primary-600 mx-auto" />
+              <p className="text-base text-gray-600">
+                Loading {itemTypeName.toLowerCase()}...
               </p>
             </div>
           </div>
-          <p className="mt-6 text-center text-xs text-gray-500">
-            © {new Date().getFullYear()} Product School. All rights reserved.
-          </p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
+    <div className="min-h-screen flex items-center justify-center bg-[#F5F5F0] px-4">
       <div className="max-w-md w-full">
-        {/* Logo */}
-        <div className="text-center mb-10">
-          <div className="flex justify-center mb-6">
-            <ProductSchoolLogo className="h-12 w-auto text-gray-900" />
-          </div>
-        </div>
-
         {/* Card */}
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-10">
+        <div className="bg-white rounded-3xl shadow-lg border border-gray-200 p-12">
+          {/* Product School Logo */}
           <div className="text-center mb-8">
-            <div className="inline-flex items-center justify-center w-14 h-14 bg-ps-blue-50 rounded-full mb-4">
-              <Lock className="h-7 w-7 text-ps-blue" />
+            <div className="flex justify-center mb-4">
+              <ProductSchoolLogo className="h-16 w-auto text-gray-900" />
             </div>
-            <h2 className="text-2xl font-bold text-gray-900 tracking-tight mb-2">
-              {clientName}
-            </h2>
-            <p className="text-sm text-gray-600">
-              Enter your access password to continue
-            </p>
+            <h1 className="text-4xl font-bold text-gray-900 tracking-tight">
+              Product School
+            </h1>
           </div>
 
-          <form onSubmit={handleSubmit} className="space-y-4">
+          {/* Divider */}
+          <div className="w-16 h-px bg-gray-300 mx-auto mb-8"></div>
+
+          {/* Confidential Text */}
+          <p className="text-center text-sm font-semibold text-gray-400 uppercase tracking-wide mb-6">
+            CONFIDENTIAL {itemTypeName.toUpperCase()} FOR
+          </p>
+
+          {/* Client Logo */}
+          {logoUrl && (
+            <div className="flex justify-center mb-8">
+              <div className="relative w-48 h-24">
+                <Image
+                  src={logoUrl}
+                  alt={clientName}
+                  fill
+                  className="object-contain"
+                />
+              </div>
+            </div>
+          )}
+
+          {/* Password Form */}
+          <form onSubmit={handleSubmit} className="space-y-4 mt-8">
             <div>
               <label htmlFor="password" className="sr-only">
-                Password
+                Access Code
               </label>
               <input
                 type="password"
                 id="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full px-4 py-3 border border-gray-300 rounded-md text-sm text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-ps-blue focus:border-transparent placeholder:text-gray-400"
-                placeholder="Enter password"
+                className="w-full px-6 py-4 border border-gray-300 rounded-xl text-base text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-primary-600 focus:border-transparent placeholder:text-gray-400"
+                placeholder="Enter access code"
                 required
                 disabled={loading}
                 autoFocus
@@ -132,7 +143,7 @@ export function PasswordEntry({
             </div>
 
             {error && (
-              <div className="rounded-md bg-red-50 border border-red-200 p-3">
+              <div className="rounded-xl bg-red-50 border border-red-200 p-4">
                 <p className="text-sm text-red-800">{error}</p>
               </div>
             )}
@@ -140,18 +151,13 @@ export function PasswordEntry({
             <button
               type="submit"
               disabled={loading || !password}
-              className="w-full flex items-center justify-center gap-2 px-4 py-3.5 bg-ps-blue text-white font-semibold rounded-md hover:bg-ps-navy transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+              className="w-full flex items-center justify-center gap-2 px-6 py-4 bg-[#1E3A5F] text-white text-base font-semibold rounded-xl hover:bg-[#152D4A] transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
             >
               {loading && <Loader2 className="h-5 w-5 animate-spin" />}
-              Access Assessment
+              Access {itemTypeName}
             </button>
           </form>
         </div>
-
-        {/* Footer */}
-        <p className="mt-6 text-center text-xs text-gray-500">
-          © {new Date().getFullYear()} Product School. All rights reserved.
-        </p>
       </div>
     </div>
   );

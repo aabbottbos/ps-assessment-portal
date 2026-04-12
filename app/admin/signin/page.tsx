@@ -10,7 +10,7 @@ export default function SignInPage() {
             <ProductSchoolLogo className="h-12 w-auto text-gray-900" />
           </div>
           <h1 className="text-3xl font-bold text-gray-900 tracking-tight mb-2">
-            Assessments Portal
+            Admin Portal
           </h1>
           <p className="text-base text-gray-600">Sign in to access the admin dashboard</p>
         </div>
@@ -19,7 +19,7 @@ export default function SignInPage() {
           <form
             action={async () => {
               "use server";
-              await signIn("google", { redirectTo: "/assessments/admin" });
+              await signIn("google", { redirectTo: "/admin" });
             }}
           >
             <button

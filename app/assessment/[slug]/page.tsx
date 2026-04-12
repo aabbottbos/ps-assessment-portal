@@ -14,7 +14,7 @@ export default async function AssessmentPage({
 
   // Look up the assessment
   const assessment = await db.assessment.findUnique({
-    where: { slug },
+    where: { slug, type: "assessment" },
   });
 
   // If not found or not active, show 404
@@ -54,7 +54,7 @@ export default async function AssessmentPage({
       slug={slug}
       clientName={assessment.clientName}
       passwordRequired={assessment.passwordRequired}
-      type={assessment.type as "assessment" | "proposal"}
+      type="assessment"
       logoUrl={assessment.logoUrl}
     />
   );

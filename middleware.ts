@@ -4,15 +4,15 @@ import { NextResponse } from "next/server";
 export default auth((req) => {
   const { pathname } = req.nextUrl;
 
-  // Protect all /assessments/admin routes (except signin and error pages)
-  if (pathname.startsWith("/assessments/admin")) {
+  // Protect all /admin routes (except signin and error pages)
+  if (pathname.startsWith("/admin")) {
     if (
-      pathname !== "/assessments/admin/signin" &&
-      pathname !== "/assessments/admin/error"
+      pathname !== "/admin/signin" &&
+      pathname !== "/admin/error"
     ) {
       if (!req.auth) {
         // Not authenticated, redirect to signin
-        const signInUrl = new URL("/assessments/admin/signin", req.url);
+        const signInUrl = new URL("/admin/signin", req.url);
         signInUrl.searchParams.set("callbackUrl", pathname);
         return NextResponse.redirect(signInUrl);
       }
@@ -23,5 +23,5 @@ export default auth((req) => {
 });
 
 export const config = {
-  matcher: ["/assessments/admin/:path*"],
+  matcher: ["/admin/:path*"],
 };

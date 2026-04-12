@@ -8,9 +8,9 @@ export function AssessmentIframe({ slug }: AssessmentIframeProps) {
   return (
     <div className="h-screen w-full">
       <iframe
-        src={`/api/assessments/proxy/${slug}`}
+        src={`/api/proxy/${slug}`}
         className="w-full h-full border-0"
-        title="Assessment"
+        title="Content"
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
         allowFullScreen
       />

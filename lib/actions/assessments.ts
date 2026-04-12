@@ -5,6 +5,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
 export interface AssessmentFormData {
+  type: "assessment" | "proposal";
   clientName: string;
   clientDescription?: string;
   assessmentType: string;
@@ -12,6 +13,7 @@ export interface AssessmentFormData {
   slug: string;
   passwordRequired: boolean;
   password?: string;
+  logoUrl?: string;
   status: string;
 }
 
@@ -28,6 +30,7 @@ export async function createAssessment(data: AssessmentFormData) {
 
     await db.assessment.create({
       data: {
+        type: data.type,
         clientName: data.clientName,
         clientDescription: data.clientDescription || null,
         assessmentType: data.assessmentType,
@@ -35,11 +38,12 @@ export async function createAssessment(data: AssessmentFormData) {
         slug: data.slug,
         passwordRequired: data.passwordRequired,
         password: data.passwordRequired ? data.password : null,
+        logoUrl: data.logoUrl || null,
         status: data.status,
       },
     });
 
-    revalidatePath("/assessments/admin");
+    revalidatePath("/admin");
     return { success: true };
   } catch (error) {
     console.error("Error creating assessment:", error);
@@ -64,6 +68,7 @@ export async function updateAssessment(id: string, data: AssessmentFormData) {
     await db.assessment.update({
       where: { id },
       data: {
+        type: data.type,
         clientName: data.clientName,
         clientDescription: data.clientDescription || null,
         assessmentType: data.assessmentType,
@@ -71,12 +76,13 @@ export async function updateAssessment(id: string, data: AssessmentFormData) {
         slug: data.slug,
         passwordRequired: data.passwordRequired,
         password: data.passwordRequired ? data.password : null,
+        logoUrl: data.logoUrl || null,
         status: data.status,
       },
     });
 
-    revalidatePath("/assessments/admin");
-    revalidatePath(`/assessments/admin/${id}`);
+    revalidatePath("/admin");
+    revalidatePath(`/admin/${id}`);
     return { success: true };
   } catch (error) {
     console.error("Error updating assessment:", error);
@@ -92,7 +98,7 @@ export async function deleteAssessment(id: string) {
       data: { status: "archived" },
     });
 
-    revalidatePath("/assessments/admin");
+    revalidatePath("/admin");
     return { success: true };
   } catch (error) {
     console.error("Error deleting assessment:", error);

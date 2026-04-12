@@ -15,17 +15,19 @@ export default async function EditAssessmentPage({
     notFound();
   }
 
+  const itemTypeName = assessment.type === "proposal" ? "Proposal" : "Assessment";
+
   return (
     <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <div className="mb-6">
-        <h2 className="text-2xl font-bold text-gray-900">Edit Assessment</h2>
+        <h2 className="text-2xl font-bold text-gray-900">Edit {itemTypeName}</h2>
         <p className="mt-1 text-sm text-gray-600">
-          Update {assessment.clientName} assessment details
+          Update {assessment.clientName} {itemTypeName.toLowerCase()} details
         </p>
       </div>
 
       <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-        <AssessmentForm assessment={assessment} />
+        <AssessmentForm assessment={assessment} type={assessment.type as "assessment" | "proposal"} />
       </div>
     </div>
   );
